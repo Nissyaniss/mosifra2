@@ -1,0 +1,49 @@
+﻿{% extends "base.html" %}
+{% load static %}
+
+<!-- page de choix du type de compte (entreprise, établissement, étudiant) -->
+{% block content %}
+  <div class="max-w-4xl mx-auto mt-16 px-4">
+    <div class="text-center mb-6">
+      <img src="{% static 'img/mosifra_logo_entier.png' %}" alt="Mosifra" class="mx-auto h-14 md:h-20 w-auto" />
+    </div>
+
+    <div class="bg-brand-surface border border-brand-primary rounded-[32px] p-8 md:p-12 shadow overflow-hidden">
+      <h1 class="text-4xl font-bold text-slate-900 text-center mb-3">Sélection du profil</h1>
+      <p class="text-center text-slate-700 mb-10">
+        Accède à ton espace personnalisé selon ton profil : étudiant, entreprise ou établissement.
+      </p>
+
+      <div class="space-y-6 max-w-2xl mx-auto">
+        <div class="flex flex-col sm:flex-row sm:items-center gap-4 text-left sm:justify-between">
+          <div class="flex items-center gap-4 w-full sm:w-auto shrink-0"> <img src="{% static 'img/business-and-trade.png' %}" alt="Entreprise" class="h-12 w-12" />
+            <a href="{% url 'accounts:register' %}?role=company" class="inline-flex items-center justify-center px-6 py-2 rounded-md bg-brand-primary text-white text-lg hover:bg-brand-primaryDark transition text-center w-full sm:w-[200px] shrink-0 sm:ml-auto">
+              Entreprise
+            </a>
+          </div>
+          <p class="text-slate-700 text-base">Propose des stages et gère facilement les candidatures.</p>
+        </div>
+
+        <div class="flex flex-col sm:flex-row sm:items-center gap-4 text-left sm:justify-between">
+          <div class="flex items-center gap-4 w-full sm:w-auto shrink-0">
+            <img src="{% static 'img/university.png' %}" alt="Établissement" class="h-12 w-12" />
+            <a href="{% url 'accounts:register' %}?role=institution" class="inline-flex items-center justify-center px-6 py-2 rounded-md bg-brand-primary text-white text-lg hover:bg-brand-primaryDark transition text-center w-full sm:w-[200px] shrink-0 sm:ml-auto">
+              Établissement
+            </a>
+          </div>
+          <p class="text-slate-700 text-base">Suivez et validez les candidatures de vos étudiants.</p>
+        </div>
+
+        <div class="flex flex-col sm:flex-row sm:items-center gap-4 text-left sm:justify-between">
+          <div class="flex items-center gap-4 w-full sm:w-auto shrink-0">
+            <img src="{% static 'img/graduation.png' %}" alt="Étudiant" class="h-12 w-12" />
+            <a href="{% url 'accounts:register_student_info' %}" class="inline-flex items-center justify-center px-6 py-2 rounded-md bg-brand-primary text-white text-lg hover:bg-brand-primaryDark transition text-center w-full sm:w-[200px] shrink-0 sm:ml-auto">
+              Étudiant
+            </a>
+          </div>
+          <p class="text-slate-700 text-base">Trouvez vos stages et postulez directement en ligne.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}

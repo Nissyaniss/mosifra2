@@ -1,0 +1,29 @@
+__pycache__/
+*.py[cod]
+*.sqlite3
+.env
+.venv/
+venv/
+.DS_Store
+.idea/
+.vscode/
+staticfiles/
+media/
+htmlcov/
+.coverage
+.mypy_cache/
+.pytest_cache/
+node_modules/
+
+# Logs
+*.log
+npm-debug.log*
+
+# Fichiers temp
+*.tmp
+*.bak
+*~
+
+# DB
+db.sqlite3
+*.db

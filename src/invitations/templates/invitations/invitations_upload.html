@@ -1,0 +1,207 @@
+{% extends "base.html" %}
+{% load static %}
+
+<!-- page d'import csv pour les établissements -->
+{% block content %}
+  <section class="bg-brand-surface w-[100vw] ml-[calc(50%-50vw)] border-y border-[#cfdffc]" style="padding: 2.5rem 0;">
+    <div class="max-w-4xl mx-auto px-4 flex items-center justify-center gap-6">
+      {% if logo_url %}
+        <img src="{{ logo_url }}" alt="Logo" class="h-[80px] w-auto object-contain">
+      {% endif %}
+      <h1 class="text-3xl md:text-[2.6rem] font-semibold text-slate-900">Ajouter de nouveaux étudiants</h1>
+    </div>
+  </section>
+
+  <div class="max-w-6xl mx-auto px-4 mt-12 space-y-10 mb-20">
+    <!-- Lien retour -->
+    <div class="flex justify-start">
+      <a href="{% url 'profiles:my_students' %}" class="inline-flex items-center gap-2 text-black hover:text-slate-700 transition font-medium group">
+        <div class="p-2 rounded-full border border-black group-hover:bg-slate-100 transition">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18" />
+            </svg>
+        </div>
+        <span>Retour</span>
+      </a>
+    </div>
+
+    <div class="w-full h-px bg-black"></div>
+
+    {% if report %}
+    <div class="relative z-50" aria-labelledby="modal-title" role="dialog" aria-modal="true">
+      <!-- fond gris semi-transparent pour le modal -->
+      <div class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity"></div>
+
+      <div class="fixed inset-0 z-10 w-screen overflow-y-auto">
+        <div class="flex min-h-full items-end justify-center p-4 text-center sm:items-center sm:p-0">
+          <!-- Modal panel -->
+          <div class="relative transform overflow-hidden rounded-lg bg-white text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-lg">
+            <div class="bg-white px-4 pb-4 pt-5 sm:p-6 sm:pb-4">
+              <div class="sm:flex sm:items-start">
+                <div class="mx-auto flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-full {% if report.failed == 0 %}bg-green-100{% else %}bg-red-100{% endif %} sm:mx-0 sm:h-10 sm:w-10">
+                  {% if report.failed == 0 %}
+                    <svg class="h-6 w-6 text-green-600" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" />
+                    </svg>
+                  {% else %}
+                    <svg class="h-6 w-6 text-red-600" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z" />
+                    </svg>
+                  {% endif %}
+                </div>
+                <div class="mt-3 text-center sm:ml-4 sm:mt-0 sm:text-left w-full">
+                  <h3 class="text-base font-semibold leading-6 text-gray-900" id="modal-title">
+                    {% if report.failed == 0 %}
+                      Importation réussie
+                    {% else %}
+                      Résultat de l'importation
+                    {% endif %}
+                  </h3>
+                  <div class="mt-2">
+                    <p class="text-sm text-gray-500">
+                      Voici le résumé de votre import CSV :
+                    </p>
+                    <ul class="mt-3 space-y-2 text-sm">
+                        <li class="flex justify-between items-center p-2 bg-green-50 rounded text-green-700">
+                            <span>Invitations envoyées :</span>
+                            <span class="font-bold">{{ report.sent }}</span>
+                        </li>
+                        {% if report.failed > 0 %}
+                        <li class="flex justify-between items-center p-2 bg-red-50 rounded text-red-700">
+                            <span>Échecs :</span>
+                            <span class="font-bold">{{ report.failed }}</span>
+                        </li>
+                        {% endif %}
+                    </ul>
+
+                    {% if report.errors %}
+                    <div class="mt-4 max-h-40 overflow-y-auto border-t pt-2">
+                        <p class="text-xs font-semibold text-red-800 mb-1">Détails des erreurs :</p>
+                        <ul class="list-disc list-inside text-xs text-red-600 space-y-1">
+                            {% for error in report.errors %}
+                            <li>{{ error }}</li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                    {% endif %}
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="bg-gray-50 px-4 py-3 sm:flex sm:flex-row-reverse sm:px-6">
+              <button type="button" onclick="this.closest('.relative.z-50').remove()" class="inline-flex w-full justify-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 sm:mt-0 sm:w-auto">Fermer</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    {% endif %}
+
+    <div class="space-y-8">
+      <h2 class="text-2xl font-bold text-black text-center md:text-left">Importer vos étudiants en masse (CSV)</h2>
+
+      <!-- Étape 1 -->
+      <div class="space-y-4">
+        <h3 class="text-lg font-semibold text-black">1. Préparez votre fichier</h3>
+        <p class="text-slate-700">
+          Pour ajouter plusieurs étudiants, utilisez un fichier CSV respectant le format suivant.<br>
+          Téléchargez notre modèle pour commencer.
+        </p>
+        <a href="{% url 'invitations:model' %}" class="inline-flex items-center gap-2 px-6 py-3 border border-black rounded-lg text-black hover:bg-slate-50 transition">
+          Télécharger le modèle CSV
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5M12 12.75l-4.5-4.5m0 0l4.5-4.5m-4.5 4.5h14.25" />
+          </svg>
+        </a>
+
+        <!-- Tableau d'exemple -->
+        <div class="overflow-x-auto border border-black rounded-lg">
+          <table class="w-full text-sm text-left">
+            <thead class="bg-gray-100 border-b border-black font-semibold">
+              <tr>
+                <th class="px-4 py-2 border-r border-black">email</th>
+                <th class="px-4 py-2 border-r border-black">prenom</th>
+                <th class="px-4 py-2 border-r border-black">nom</th>
+                <th class="px-4 py-2 border-r border-black">filiere_ou_parcours</th>
+                <th class="px-4 py-2 border-r border-black">niveau</th>
+                <th class="px-4 py-2">annee_academique</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-black">
+              <tr>
+                <td class="px-4 py-2 border-r border-black">lilian.olliver@gmail.com</td>
+                <td class="px-4 py-2 border-r border-black">Lilian</td>
+                <td class="px-4 py-2 border-r border-black">Olliver</td>
+                <td class="px-4 py-2 border-r border-black">BUT Informatique</td>
+                <td class="px-4 py-2 border-r border-black">BUT2</td>
+                <td class="px-4 py-2">2025-2026</td>
+              </tr>
+              <tr>
+                <td class="px-4 py-2 border-r border-black">alexielajoigne@etu.unilim.fr</td>
+                <td class="px-4 py-2 border-r border-black">Alexie</td>
+                <td class="px-4 py-2 border-r border-black">Lajoigne</td>
+                <td class="px-4 py-2 border-r border-black">Ingénierie Mécanique</td>
+                <td class="px-4 py-2 border-r border-black">Master 1</td>
+                <td class="px-4 py-2">2025-2026</td>
+              </tr>
+              <tr>
+                <td class="px-4 py-2 border-r border-black">shaune.cepin@orange.fr</td>
+                <td class="px-4 py-2 border-r border-black">Shaune</td>
+                <td class="px-4 py-2 border-r border-black">Cepin</td>
+                <td class="px-4 py-2 border-r border-black">Licence Économie</td>
+                <td class="px-4 py-2 border-r border-black">L3</td>
+                <td class="px-4 py-2">2025-2026</td>
+              </tr>
+              <tr>
+                <td class="px-4 py-2 border-r border-black">dixmille.paule@etu.unilim.fr</td>
+                <td class="px-4 py-2 border-r border-black">Paule</td>
+                <td class="px-4 py-2 border-r border-black">Dixmillé</td>
+                <td class="px-4 py-2 border-r border-black">Business Management</td>
+                <td class="px-4 py-2 border-r border-black">Parcours International</td>
+                <td class="px-4 py-2">2025-2026</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Étape 2 -->
+      <div class="space-y-4">
+        <h3 class="text-lg font-semibold text-black">2. Importez votre fichier CSV</h3>
+        
+        <form method="post" enctype="multipart/form-data" id="uploadForm" class="space-y-6">
+          {% csrf_token %}
+          
+          <div class="relative flex flex-col items-center justify-center w-full h-48 border border-black rounded-2xl bg-gray-50 hover:bg-gray-100 transition cursor-pointer" id="dropZone">
+            <div class="flex flex-col items-center justify-center pt-5 pb-6">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-10 h-10 mb-3 text-black">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M12 16.5V9.75m0 0l3 3m-3-3l-3 3M6.75 19.5a4.5 4.5 0 01-1.41-8.775 5.25 5.25 0 0110.233-2.33 3 3 0 013.758 3.848A3.752 3.752 0 0118 19.5H6.75z" />
+              </svg>
+              <p class="mb-2 text-sm text-black"><span class="font-semibold">Glissez votre fichier CSV ici</span> ou cliquez pour sélectionner</p>
+              <button type="button" class="mt-2 px-4 py-2 bg-transparent border border-black rounded-lg text-sm font-medium hover:bg-white transition">
+                Choisir un fichier
+              </button>
+            </div>
+            <!-- htmx envoie le fichier au serveur dès qu'on le sélectionne -->
+            <!-- la réponse est affichée dans previewContainer sans recharger la page -->
+            <input 
+                id="id_csv_file" 
+                name="csv_file" 
+                type="file" 
+                class="absolute inset-0 w-full h-full opacity-0 cursor-pointer" 
+                accept=".csv" 
+                required 
+                hx-post="{% url 'invitations:preview' %}"
+                hx-trigger="change"
+                hx-target="#previewContainer"
+                hx-encoding="multipart/form-data"
+            />
+          </div>
+
+          <!-- Prévisualisation -->
+          <div id="previewContainer"></div>
+        </form>
+      </div>
+    </div>
+  </div>
+{% endblock %}

@@ -1,0 +1,156 @@
+{% extends "base.html" %}
+{% load static %}
+
+<!-- formulaire d'inscription pour entreprises et établissements -->
+{% block content %}
+  <section class="bg-brand-surface w-[100vw] ml-[calc(50%-50vw)] border-y border-[#cfdffc]" style="padding: 2.5rem 0;">
+    <div class="max-w-4xl mx-auto px-4 text-center">
+      <h1 class="text-3xl md:text-[2.6rem] font-semibold text-slate-900">{{ signup_title }}</h1>
+    </div>
+  </section>
+
+  <div class="max-w-4xl mx-auto px-4 mt-12 space-y-10">
+    <p class="mx-auto max-w-lg rounded-full border border-slate-300 bg-[#d9d9d9] px-6 py-4 text-center text-sm md:text-base text-slate-900 shadow-sm">
+      J'ai déjà un compte {{ account_word|default:"recruteur" }}.
+      <a href="{% url 'accounts:login' %}" class="font-semibold text-black underline">Me connecter</a>
+    </p>
+
+    <div class="w-full h-px bg-black"></div>
+    <form method="post" enctype="multipart/form-data" class="space-y-8 bg-transparent" novalidate>
+      {% csrf_token %}
+      <!-- champs cachés (role, username) gérés côté serveur -->
+      {% for hidden in form.hidden_fields %}
+        {{ hidden }}
+      {% endfor %}
+
+      {% if form.non_field_errors %}
+        <div class="rounded-2xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
+          {{ form.non_field_errors }}
+        </div>
+      {% endif %}
+
+      {% if form.username.errors %}
+        <div class="rounded-2xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
+          {{ form.username.errors }}
+        </div>
+      {% endif %}
+
+      <div class="grid gap-5 md:grid-cols-2 bg-transparent">
+        <div>
+          <label class="block text-sm font-medium text-slate-700 mb-1">Nom de {{ org_word }}</label>
+          {{ form.organisation_name }}
+          {% if form.organisation_name.errors %}
+            <p class="text-sm text-red-600 mt-1">{{ form.organisation_name.errors|striptags }}</p>
+          {% endif %}
+        </div>
+        <div>
+          <label class="block text-sm font-medium text-slate-700 mb-1">{{ form.password1.label }}</label>
+          {{ form.password1 }}
+          {% if form.password1.errors %}
+            <p class="text-sm text-red-600 mt-1">{{ form.password1.errors|striptags }}</p>
+          {% endif %}
+        </div>
+        <div>
+          <label class="block text-sm font-medium text-slate-700 mb-1">Email</label>
+          {{ form.email }}
+          <p class="text-xs text-slate-500 mt-1">{{ email_hint }}</p>
+          {% if form.email.errors %}
+            <p class="text-sm text-red-600 mt-1">{{ form.email.errors|striptags }}</p>
+          {% endif %}
+        </div>
+        <div>
+          <label class="block text-sm font-medium text-slate-700 mb-1">{{ form.password2.label }}</label>
+          {{ form.password2 }}
+          {% if form.password2.errors %}
+            <p class="text-sm text-red-600 mt-1">{{ form.password2.errors|striptags }}</p>
+          {% endif %}
+        </div>
+        <div>
+          <label class="block text-sm font-medium text-slate-700 mb-1">Lieu de {{ org_word }}</label>
+          {{ form.organisation_location }}
+          {% if form.organisation_location.errors %}
+            <p class="text-sm text-red-600 mt-1">{{ form.organisation_location.errors|striptags }}</p>
+          {% endif %}
+        </div>
+        <div>
+          <label class="block text-sm font-medium text-slate-700 mb-1">{{ form.country_code.label }}</label>
+          {{ form.country_code }}
+          {% if form.country_code.errors %}
+            <p class="text-sm text-red-600 mt-1">{{ form.country_code.errors|striptags }}</p>
+          {% endif %}
+        </div>
+        <div class="md:col-span-2">
+          <label class="block text-sm font-medium text-slate-700 mb-1">Téléphone</label>
+          {{ form.organisation_phone }}
+          {% if form.organisation_phone.errors %}
+            <p class="text-sm text-red-600 mt-1">{{ form.organisation_phone.errors|striptags }}</p>
+          {% endif %}
+        </div>
+        <div class="md:col-span-2">
+          <label class="block text-sm font-medium text-slate-700 mb-1">Site web</label>
+          {{ form.organisation_site }}
+          {% if form.organisation_site.errors %}
+            <p class="text-sm text-red-600 mt-1">{{ form.organisation_site.errors|striptags }}</p>
+          {% endif %}
+        </div>
+        <div class="md:col-span-2">
+          <label class="block text-sm font-medium text-slate-700 mb-1">Logo de {{ org_word }}</label>
+          <label class="flex items-center justify-between rounded-full border border-slate-400 px-5 py-3 text-sm text-slate-500 cursor-pointer hover:bg-slate-50">
+            <span id="logo-file-name" class="text-sm md:text-base">{{ form.organisation_logo.value|default:"Aucun fichier" }}</span>
+            <img src="{% static 'img/upload.png' %}" alt="Upload" class="h-5 w-5" />
+            {{ form.organisation_logo }}
+          </label>
+          <div id="logo-preview-wrapper" class="mt-3 hidden">
+            <p class="text-xs text-slate-500 mb-2" id="logo-preview-name"></p>
+            <img id="logo-preview-image" src="" alt="Prévisualisation du logo" class="h-20 max-w-[160px] object-contain rounded-lg border border-slate-200 bg-white" />
+          </div>
+          {% if form.organisation_logo.errors %}
+            <p class="text-sm text-red-600 mt-1">{{ form.organisation_logo.errors|striptags }}</p>
+          {% endif %}
+        </div>
+        <div class="md:col-span-2">
+          <label class="block text-sm font-medium text-slate-700 mb-1">Description de {{ org_word }}</label>
+          <div class="border border-slate-400 rounded-2xl overflow-hidden bg-white">
+            <div class="flex gap-1 px-3 py-2 border-b border-slate-200 bg-slate-50">
+              <button type="button" onclick="formatTextReg('bold')" class="px-2 py-1 text-sm font-bold hover:bg-slate-200 rounded" title="Gras">G</button>
+              <button type="button" onclick="formatTextReg('italic')" class="px-2 py-1 text-sm italic hover:bg-slate-200 rounded" title="Italique">I</button>
+              <button type="button" onclick="formatTextReg('underline')" class="px-2 py-1 text-sm underline hover:bg-slate-200 rounded" title="Souligné">S</button>
+
+            </div>
+            <div id="org_desc_editor" contenteditable="true" style="min-height:100px;border:none;outline:none;" class="w-full px-4 py-3 text-sm text-slate-900 focus:outline-none" data-placeholder="Présentez votre structure..."></div>
+          </div>
+          <input type="hidden" name="organisation_description" id="org_desc_hidden">
+          <style>#org_desc_editor:empty:before { content: attr(data-placeholder); color: #94a3b8; }</style>
+          {% if form.organisation_description.errors %}
+            <p class="text-sm text-red-600 mt-1">{{ form.organisation_description.errors|striptags }}</p>
+          {% endif %}
+        </div>
+      </div>
+
+      <div>
+        <label class="flex items-center gap-2 text-sm text-slate-700">
+          <input type="checkbox" name="terms" class="h-4 w-4 rounded border border-slate-400" required />
+          J'accepte les termes d'utilisation et la politique de confidentialité
+        </label>
+        {% if form.terms.errors %}
+          <p class="text-sm text-red-600 mt-1">{{ form.terms.errors|striptags }}</p>
+        {% endif %}
+      </div>
+
+      <div class="text-center">
+        <button type="submit" class="inline-flex items-center justify-center rounded-full bg-brand-primary px-10 py-3 text-lg font-semibold text-white hover:bg-brand-primaryDark transition">
+          Nous rejoindre
+        </button>
+      </div>
+    </form>
+  </div>
+
+  <!-- script pour afficher la prévisualisation du logo sans recharger la page -->
+  <script src="{% static 'js/logo-preview.js' %}"></script>
+  <script>
+    function formatTextReg(cmd) { document.execCommand(cmd, false, null); }
+    document.getElementById('org_desc_editor').addEventListener('input', function() {
+      document.getElementById('org_desc_hidden').value = this.innerHTML;
+    });
+  </script>
+{% endblock %}

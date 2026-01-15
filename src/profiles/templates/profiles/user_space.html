@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+  {% include "profiles/partials/user_space_banner.html" %}
+
+  <div class="max-w-3xl mx-auto px-4 mt-12 space-y-10">
+    {% with active=active_tab %}
+      {% include "profiles/partials/account_nav.html" %}
+    {% endwith %}
+
+    <div class="w-full h-px bg-black"></div>
+
+    <!-- conteneur pour le contenu dynamique rechargé par HTMX -->
+    <div id="tab-content" class="space-y-6">
+      {% include tab_template %}
+    </div>
+  </div>
+{% endblock %}

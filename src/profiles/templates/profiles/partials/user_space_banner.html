@@ -1,0 +1,9 @@
+<!-- bannière réutilisable pour l'espace utilisateur (établissement/entreprise) -->
+<section class="bg-brand-surface w-[100vw] ml-[calc(50%-50vw)] border-y border-[#cfdffc]" style="padding: 2.5rem 0;">
+  <div class="max-w-4xl mx-auto px-4 flex items-center justify-center gap-6">
+    {% if logo_url %}
+      <img src="{{ logo_url }}" alt="Logo" class="h-[80px] w-auto object-contain">
+    {% endif %}
+    <h1 class="text-3xl md:text-[2.6rem] font-semibold text-slate-900">Mon espace</h1>
+  </div>
+</section>

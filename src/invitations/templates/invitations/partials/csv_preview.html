@@ -1,0 +1,36 @@
+<!-- template partiel injecté par htmx pour prévisualiser le csv -->
+{% if rows %}
+<div class="space-y-4">
+    <h3 class="text-lg font-semibold text-black">Prévisualisation</h3>
+    <!-- on affiche les premières lignes du csv dans un tableau -->
+    <div class="overflow-x-auto border border-black rounded-lg">
+      <table class="w-full text-sm text-left">
+        <thead class="bg-gray-100 border-b border-black font-semibold">
+          <tr>
+            {% for header in rows.0 %}
+            <th class="px-4 py-2 border-r border-black last:border-r-0">{{ header }}</th>
+            {% endfor %}
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-black">
+          {% for row in rows|slice:"1:" %}
+          <tr>
+            {% for cell in row %}
+            <td class="px-4 py-2 border-r border-black last:border-r-0">{{ cell }}</td>
+            {% endfor %}
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+
+    <div class="flex justify-center pt-4">
+      <button type="submit" class="px-8 py-3 bg-[#4F75FF] text-white font-semibold rounded-lg hover:bg-blue-600 transition shadow-md flex items-center gap-2">
+        Valider l'importation
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
+        </svg>
+      </button>
+    </div>
+</div>
+{% endif %}

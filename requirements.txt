@@ -1,0 +1,6 @@
+Django>=5.0,<6.0
+psycopg[binary]>=3.1
+requests>=2.32
+Pillow>=10.0
+bleach>=6.0
+pycountry>=24.0

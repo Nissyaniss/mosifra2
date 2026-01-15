@@ -1,0 +1,31 @@
+<!-- contenu de l'onglet "Mes Etudiants" chargé via HTMX -->
+{% load static %}
+
+<!-- bouton pour ajouter des étudiants -->
+<a href="{% url 'invitations:upload' %}" class="block bg-white rounded-2xl border border-black p-8 text-center hover:bg-slate-50 transition group">
+  <div class="flex items-center justify-center gap-4">
+    <span class="text-2xl md:text-3xl text-black">Ajouter de nouveaux étudiants</span>
+    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-10 h-10 md:w-12 md:h-12 text-black">
+      <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+    </svg>
+  </div>
+</a>
+
+<!-- liste des étudiants -->
+{% if students %}
+  <div class="space-y-6">
+    {% for student in students %}
+      <div class="bg-white rounded-2xl border border-black p-6">
+        <h3 class="text-xl font-bold text-black mb-1">
+          {{ student.user.first_name }} {{ student.user.last_name }}
+        </h3>
+        <p class="text-slate-700 font-medium">
+          {{ student.filiere }} - {{ student.level }}
+        </p>
+        <p class="text-slate-600 text-sm">
+          {{ student.user.email }}
+        </p>
+      </div>
+    {% endfor %}
+  </div>
+{% endif %}

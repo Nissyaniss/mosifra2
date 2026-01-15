@@ -1,0 +1,12 @@
+<!-- contenu de l'onglet "Mon compte" chargé via HTMX -->
+<div class="bg-white rounded-2xl border border-slate-300 shadow-sm divide-y divide-slate-200 text-sm md:text-base">
+  <a href="#" class="block px-6 py-4 hover:bg-slate-50 text-left">Information du compte</a>
+  <form method="post" action="{% url 'accounts:logout' %}" class="block">
+    {% csrf_token %}
+    <button type="submit" class="w-full text-left px-6 py-4 hover:bg-slate-50 text-black">
+      Se déconnecter
+    </button>
+  </form>
+  <a href="#" class="block px-6 py-4 hover:bg-slate-50 text-left">Politique de confidentialité</a>
+  <a href="#" class="block px-6 py-4 hover:bg-slate-50 text-left text-red-600">Désactiver mon compte</a>
+</div>

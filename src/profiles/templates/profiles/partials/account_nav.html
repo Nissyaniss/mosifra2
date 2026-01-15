@@ -1,0 +1,48 @@
+<div class="flex justify-center">
+  <div class="inline-flex rounded-full border border-black bg-white text-sm md:text-base overflow-hidden">
+    {% if active == "dashboard" %}
+    <span class="px-6 py-2 text-black font-semibold border-r border-black" style="background-color:#d9d9d9;">Tableau de
+      bord</span>
+    {% else %}
+    <a href="{% url 'profiles:account_space' %}"
+      class="px-6 py-2 text-black hover:bg-slate-100 transition border-r border-black">Tableau de bord</a>
+    {% endif %}
+
+    {% if user.is_staff %}
+    {% if active == "validation" %}
+    <span class="px-6 py-2 text-black font-semibold border-r border-black" style="background-color:#d9d9d9;">Validation
+      de compte</span>
+    {% else %}
+    <a href="{% url 'profiles:admin_validation' %}"
+      class="px-6 py-2 text-black hover:bg-slate-100 transition border-r border-black">Validation de compte</a>
+    {% endif %}
+    {% endif %}
+
+    {% if user.role == "company" or user.role == "institution" %}
+    {% if active == "offers" %}
+    <span class="px-6 py-2 text-black font-semibold border-r border-black" style="background-color:#d9d9d9;">Mes
+      offres</span>
+    {% else %}
+    <a href="{% url 'profiles:my_offers' %}"
+      class="px-6 py-2 text-black hover:bg-slate-100 transition border-r border-black">Mes offres</a>
+    {% endif %}
+    {% endif %}
+
+    {% if user.role == "institution" %}
+    {% if active == "students" %}
+    <span class="px-6 py-2 text-black font-semibold border-r border-black" style="background-color:#d9d9d9;">Mes
+      Etudiants</span>
+    {% else %}
+    <a href="{% url 'profiles:my_students' %}"
+      class="px-6 py-2 text-black hover:bg-slate-100 transition border-r border-black">Mes Etudiants</a>
+    {% endif %}
+    {% endif %}
+
+    {% if active == "account" %}
+    <span class="px-6 py-2 text-black font-semibold" style="background-color:#d9d9d9;">Mon compte</span>
+    {% else %}
+    <a href="{% url 'profiles:account_space' %}?tab=account"
+      class="px-6 py-2 text-black hover:bg-slate-100 transition">Mon compte</a>
+    {% endif %}
+  </div>
+</div>

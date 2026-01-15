@@ -1,0 +1,85 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+  <section class="bg-brand-surface w-[100vw] ml-[calc(50%-50vw)] border-y border-[#cfdffc]" style="padding: 2.5rem 0;">
+    <div class="max-w-4xl mx-auto px-4 text-center">
+      <h1 class="text-3xl md:text-[2.6rem] font-semibold text-slate-900">Finaliser mon inscription</h1>
+    </div>
+  </section>
+
+  <div class="max-w-4xl mx-auto px-4 mt-12 space-y-10 mb-20">
+    <p class="mx-auto max-w-lg rounded-full border border-slate-300 bg-[#d9d9d9] px-6 py-4 text-center text-sm md:text-base text-slate-900 shadow-sm">
+      Bienvenue {{ invitation.first_name }} ! Tu as été invité(e) par ton établissement.
+    </p>
+
+    <div class="w-full h-px bg-black"></div>
+
+    <form method="post" class="space-y-8" novalidate>
+      {% csrf_token %}
+
+      {% if form.non_field_errors %}
+        <div class="rounded-2xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
+          {{ form.non_field_errors }}
+        </div>
+      {% endif %}
+
+      <div class="grid gap-5 md:grid-cols-2">
+        <div>
+          <label class="block text-sm font-medium text-slate-700 mb-1">Établissement</label>
+          <input type="text" value="{{ institution_name }}" disabled class="w-full rounded-full border border-slate-300 bg-slate-100 px-5 py-3 text-sm md:text-base text-slate-600 cursor-not-allowed">
+        </div>
+        <div>
+          <label class="block text-sm font-medium text-slate-700 mb-1">Email</label>
+          <input type="email" value="{{ invitation.email }}" disabled class="w-full rounded-full border border-slate-300 bg-slate-100 px-5 py-3 text-sm md:text-base text-slate-600 cursor-not-allowed">
+        </div>
+        <div>
+          <label class="block text-sm font-medium text-slate-700 mb-1">Prénom</label>
+          <input type="text" value="{{ invitation.first_name }}" disabled class="w-full rounded-full border border-slate-300 bg-slate-100 px-5 py-3 text-sm md:text-base text-slate-600 cursor-not-allowed">
+        </div>
+        <div>
+          <label class="block text-sm font-medium text-slate-700 mb-1">Nom</label>
+          <input type="text" value="{{ invitation.last_name }}" disabled class="w-full rounded-full border border-slate-300 bg-slate-100 px-5 py-3 text-sm md:text-base text-slate-600 cursor-not-allowed">
+        </div>
+        <div>
+          <label class="block text-sm font-medium text-slate-700 mb-1">Filière</label>
+          <input type="text" value="{{ invitation.filiere }}" disabled class="w-full rounded-full border border-slate-300 bg-slate-100 px-5 py-3 text-sm md:text-base text-slate-600 cursor-not-allowed">
+        </div>
+        <div>
+          <label class="block text-sm font-medium text-slate-700 mb-1">Niveau</label>
+          <input type="text" value="{{ invitation.level }}" disabled class="w-full rounded-full border border-slate-300 bg-slate-100 px-5 py-3 text-sm md:text-base text-slate-600 cursor-not-allowed">
+        </div>
+        <div>
+          <label class="block text-sm font-medium text-slate-700 mb-1">Année académique</label>
+          <input type="text" value="{{ invitation.academic_year }}" disabled class="w-full rounded-full border border-slate-300 bg-slate-100 px-5 py-3 text-sm md:text-base text-slate-600 cursor-not-allowed">
+        </div>
+      </div>
+
+      <div class="w-full h-px bg-slate-300"></div>
+
+      <div class="grid gap-5 md:grid-cols-2">
+        <div>
+          <label class="block text-sm font-medium text-slate-700 mb-1">Mot de passe</label>
+          <input type="password" name="password1" class="w-full rounded-full border border-slate-400 px-5 py-3 text-sm md:text-base text-slate-900 focus:outline-none focus:ring-2 focus:ring-brand-primary bg-transparent placeholder-slate-500" placeholder="Mot de passe" required>
+          {% if form.password1.errors %}
+            <p class="text-sm text-red-600 mt-1">{{ form.password1.errors|striptags }}</p>
+          {% endif %}
+        </div>
+        <div>
+          <label class="block text-sm font-medium text-slate-700 mb-1">Confirmer le mot de passe</label>
+          <input type="password" name="password2" class="w-full rounded-full border border-slate-400 px-5 py-3 text-sm md:text-base text-slate-900 focus:outline-none focus:ring-2 focus:ring-brand-primary bg-transparent placeholder-slate-500" placeholder="Confirmer le mot de passe" required>
+          {% if form.password2.errors %}
+            <p class="text-sm text-red-600 mt-1">{{ form.password2.errors|striptags }}</p>
+          {% endif %}
+        </div>
+      </div>
+      <p class="text-xs text-slate-500 -mt-4">8 caractères minimum, une majuscule, une minuscule et un caractère spécial</p>
+
+      <div class="text-center">
+        <button type="submit" class="inline-flex items-center justify-center rounded-full bg-brand-primary px-10 py-3 text-lg font-semibold text-white hover:bg-brand-primaryDark transition">
+          Créer mon compte
+        </button>
+      </div>
+    </form>
+  </div>
+{% endblock %}

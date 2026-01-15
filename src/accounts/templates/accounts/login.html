@@ -1,0 +1,64 @@
+﻿{% extends "base.html" %}
+{% load static %}
+
+<!-- page de connexion avec email et mot de passe -->
+{% block content %}
+  <div class="max-w-3xl mx-auto mt-16 px-4">
+    <div class="text-center mb-6">
+      <img
+        src="{% static 'img/mosifra_logo_entier.png' %}"
+        alt="Mosifra"
+        class="mx-auto h-14 md:h-20 w-auto"
+      />
+    </div>
+
+    <div class="bg-brand-surface border border-brand-primary rounded-[32px] p-8 md:p-12 shadow overflow-hidden">
+      <h1 class="text-4xl font-bold text-slate-900 text-center mb-3">Connexion</h1>
+      <p class="text-center text-slate-700 mb-8">
+        Accédez à votre espace Mosifra avec votre email et votre mot de passe.
+      </p>
+
+      <form method="post" class="space-y-6 max-w-xl mx-auto">
+        {% csrf_token %}
+
+        {% if messages %}
+          {% for message in messages %}
+            <div class="p-3 rounded-lg {% if message.tags == 'success' %}bg-green-50 text-green-700{% else %}bg-red-50 text-red-700{% endif %} text-sm">
+              {{ message }}
+            </div>
+          {% endfor %}
+        {% endif %}
+
+        {% if form.non_field_errors %}
+          <div class="p-3 rounded-lg bg-red-50 text-red-700 text-sm">
+            {{ form.non_field_errors }}
+          </div>
+        {% endif %}
+
+        <div>
+          {{ form.username }}
+          {{ form.username.errors }}
+        </div>
+
+        <div>
+          {{ form.password }}
+          {{ form.password.errors }}
+        </div>
+
+        <div class="pt-6">
+          <button
+            type="submit"
+            class="w-full inline-flex items-center justify-center px-4 py-2 rounded-md bg-brand-primary text-white text-lg hover:bg-brand-primaryDark transition"
+          >
+            Se connecter
+          </button>
+        </div>
+
+        <p class="text-center text-sm text-slate-600">
+          Mot de passe oublié ?
+          <a href="{% url 'accounts:password_reset_request' %}" class="text-brand-primary font-semibold hover:underline">Réinitialiser</a>
+        </p>
+      </form>
+    </div>
+  </div>
+{% endblock %}

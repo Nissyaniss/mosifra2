@@ -1,0 +1,32 @@
+{
+  "name": "mosifra",
+  "version": "1.0.0",
+  "description": "Petit projet Django pour démarrer Mosifra.",
+  "main": "index.js",
+  "directories": {
+    "test": "tests"
+  },
+  "scripts": {
+    "tailwind:build": "tailwindcss -i ./assets/styles/tailwind.css -o ./src/static/css/app.css --minify",
+    "tailwind:watch": "tailwindcss -i ./assets/styles/tailwind.css -o ./src/static/css/app.css --watch",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/A-Lajoinie/Mosifra.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/A-Lajoinie/Mosifra/issues"
+  },
+  "homepage": "https://github.com/A-Lajoinie/Mosifra#readme",
+  "devDependencies": {
+    "@tailwindcss/forms": "^0.5.10",
+    "autoprefixer": "^10.4.21",
+    "postcss": "^8.5.6",
+    "tailwindcss": "^3.4.13"
+  }
+}
