@@ -17,11 +17,13 @@ jobs:
         with:
           python-version: '3.11'
 
-      - name: Install Dependencies
-        run: pip install pylint
+      - name: Install Pydeps
+        run: |
+          sudo apt-get install -y graphviz
+          pip install pydeps
 
-      - name: Generate Codebase Diagram
-        run: pyreverse -o png -p MyCode .
+      - name: Generate Module Diagram
+        run: pydeps src --noshow --output codebase.png --only src
 
       - name: Upload Artifact
         uses: actions/upload-artifact@v4
