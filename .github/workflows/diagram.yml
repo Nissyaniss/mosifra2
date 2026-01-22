@@ -18,14 +18,13 @@ jobs:
           python-version: '3.11'
 
       - name: Install Dependencies
-        run: |
-          pip install diagrams
+        run: pip install pylint
 
-      - name: Generate Diagram
-        run: python my_diagram_script.py
+      - name: Generate Codebase Diagram
+        run: pyreverse -o png -p MyCode .
 
       - name: Upload Artifact
         uses: actions/upload-artifact@v4
         with:
-          name: architecture-diagram
+          name: codebase-diagrams
           path: "*.png"
